@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container mx-auto p-4">
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden max-w-4xl mx-auto">
+            <!-- Close Button -->
+            <a href="/" class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 focus:outline-none">
+    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+         xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"></path>
+    </svg>
+</a>
+
+                </svg>
+            </button>
+            <!-- Main Content -->
+            <div class="grid grid-cols-1 lg:grid-cols-2">
+                <!-- Large Image -->
+                <div class="lg:col-span-1">
+                    <img src="{{ post.image.url }}" alt="Post Image" class="w-full h-auto">
+                </div>
+                <!-- Right-side Panel -->
+                <div class="p-6 lg:col-span-1">
+                    <!-- Caption -->
+                    <h2 class="text-xl font-semibold">{{ post.user }}</h2>
+                    <br>
+                    <h6>{{ post.caption }}</h6>
+
+                    <!-- Like Button -->
+                    <form style="margin-top: 20px;" action="{% url 'like-post' %}" method="get">
+                        {% csrf_token %}
+                        <input type="hidden" name="post_id" value="{{ post.id }}">
+                        <button type="submit" class="focus:outline-none">
+                            <img style="width:50px" src="{% static 'sw.png' %}" alt="Switch">
+                        </button>
+                    </form>
+                    <!-- Number of Likes -->
+                    <p class="text-gray-600">
+                        {% if post.no_of_likes == 0 %}
+                            0 Switches
+                        {% elif post.no_of_likes == 1 %}
+                            Switched on by 1 person
+                        {% else %}
+                            Switched on by {{ post.no_of_likes }} people
+                        {% endif %}
+                    </p>
+                    <!-- Comment Bar -->
+                    <div class="mt-4">
+                        <form action="{% url 'submit_comment' %}" method="post" class="flex items-center">
+                            {% csrf_token %}
+                            <input type="hidden" name="post_id" value="{{ post.id }}">
+                            <input type="text" name="text" placeholder="Add a comment"
+                                   class="bg-gray-200 rounded-md px-4 py-2 flex-grow focus:outline-none">
+                            <button style="margin-left: 15px" type="submit" class="focus:outline-none">
+                            <img style="width:60px" src="{% static 'comment.png' %}" alt="Switch">
+                        </button>
+                        </form>
+                    </div>
+                    <!-- All Comments -->
+                    <div class="mt-4">
+                        {% for comment in comments %}
+                            <div class="flex items-center space-x-2">
+                                <strong>{{ comment.user }}</strong>
+                                <span>{{ comment.comment_text }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

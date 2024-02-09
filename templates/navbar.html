@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+<body>
+<header style="padding: 5px">
+    <div class="header_inner flex justify-between items-center">
+        <div style="margin-right: 55px" class="logo">
+            <a href="{% url 'index' %}">
+                <img href="/" src="{% static 'logo.png' %}" alt="Logo">
+            </a>
+        </div>
+        <div class="search-form flex items-center">
+            <form action="/search" method="POST" class="flex items-center">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Search for username.." class="mr-2">
+                <button type="submit" class="search-button"><i class="fa fa-search fa-1x"></i></button>
+            </form>
+        </div>
+        <div class="centered-text">
+        </div>
+
+        <div class="right-side flex items-center">
+{#            <a style="margin-right: 35px" href="{% url 'index' %}" class="home-button">Home</a>#}
+            <a href="#" class="upload-button bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded">
+                <ion-icon name="add-circle" class="mr-1 text-xl"></ion-icon>
+                Upload Pictures
+            </a>
+
+            <div uk-dropdown="pos: top-right;mode:click ; animation: uk-animation-slide-bottom-small"
+                 class="header_dropdown">
+                <div class="px-4 py-3 -mx-5 -mt-4 mb-5 border-b">
+                    <h4>Upload Pictures</h4>
+                </div>
+                <form action="{% url 'upload' %}" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="flex justify-center flex-center text-center">
+                        <div class="flex flex-col choose-upload text-center">
+                            <div class="bg-gray-100 border-2 border-dashed flex flex-col h-24 items-center justify-center relative w-full rounded-lg">
+                                <!-- Drag and drop SVG icon -->
+                                <label for="fileInput" class="cursor-pointer">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                                         class="w-12">
+                                        <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1.977A4.5 4.5 0 1113.5 13H11V9.413l1.293 1.293a1 1 0 001.414-1.414l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13H5.5z"/>
+                                        <path d="M9 13h2v5a1 1 0 11-2 0v-5z"/>
+                                    </svg>
+                                    <input id="fileInput" type="file" name="image_upload" class="hidden"
+                                           accept="image/*">
+                                </label>
+                            </div>
+                            <p class="my-3 leading-6">Select file</p>
+                            <textarea class="button soft-warning small" name="caption" placeholder="caption"></textarea>
+                            <br>
+                            <button class="button soft-warning small" type="submit">Upload</button>
+                        </div>
+                    </div>
+                </form>
+
+                <div class="px-4 py-3 -mx-5 -mb-4 mt-5 border-t text-sm">
+                    Your Video size Must be Maxmium 999MB
+                </div>
+            </div>
+
+
+         
+
+            <!-- Profile -->
+            <a href="#">
+                <img src="{{ user_profile.profile_img.url }}" class="header-avatar" alt="">
+            </a>
+            <div uk-drop="mode: click;offset:9" class="header_dropdown profile_dropdown border-t">
+                <ul>
+                    <li><a href="{% url 'settings' %}"> Account settings </a></li>
+                    <li>
+                        {% if user_profile.user %}
+                        <li><a href="{% url 'profile' pk=user_profile.user %}">My profile</a></li>
+                    {% endif %}
+                    </li>
+                    <li><a href="{% url 'logout' %}"> Log Out</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+</body>
+</html>
