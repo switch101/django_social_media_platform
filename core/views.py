@@ -188,19 +188,15 @@ def profile(request, pk):
     user_posts = Post.objects.filter(user=pk)
     user_post_length = len(user_posts)
 
-    # Fetch followers and following count
     user_followers = FollowersCount.objects.filter(user=pk).count()
     user_following = FollowersCount.objects.filter(follower=pk).count()
 
-    # Fetch followers and following users
     followers = FollowersCount.objects.filter(user=pk)
     following = FollowersCount.objects.filter(follower=pk)
 
-    # Get the list of followers and following users' usernames
     followers_list = [follower.follower for follower in followers]
     following_list = [followed_user.user for followed_user in following]
 
-    # Retrieve user objects for followers and following
     followers_users = User.objects.filter(username__in=followers_list)
     following_users = User.objects.filter(username__in=following_list)
 
@@ -215,13 +211,12 @@ def profile(request, pk):
         'following_users': following_users
     }
 
-    # Fetch comments for each post
+
     for post in user_posts:
         post.comments = Comment.objects.filter(post=post)
 
     return render(request, 'profile.html', context)
 
-    # Fetch comments for each post
     for post in user_posts:
         post.comments = Comment.objects.filter(post=post)
 
